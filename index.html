@@ -109,6 +109,25 @@
         .attr('height', height)
         .append('g')
         .attr('transform', `translate(${width / 2}, ${height / 2})`);
+    
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const pie = d3.pie()
+        .value(d => d.value);
+    
+    const arc = d3.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+    
+    const labelArc = d3.arc()
+        .outerRadius(radius - 40)
+        .innerRadius(radius - 40);
+    
+    function updatePieChart(data) {
+        const arcs = pie(data);
+        const path = svg.select
+    }
+    
 
     document.getElementById('visualize').addEventListener('click', () => {
         const stocks = [];
