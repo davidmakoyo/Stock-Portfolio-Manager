@@ -25,7 +25,7 @@ async function fetchStockPrice(ticker) {
         } else {
             console.error('Error fetching stock price');
             return null;
-            // if error fetching stock price throw up an error bubble or something blank is not a valid tticker
+            // if error fetching stock price throw up an error bubble or something blank is not a valid ticker
         }
     } catch (error) {
         console.error('Error fetching stock price', error);
@@ -38,73 +38,74 @@ const height = 400;
 const radius = Math.min(width, height) / 2;
 
 const svg = d3.select('#pie-chart')
-.append('svg')
-.attr('width', width)
-.attr('height', height)
-.append('g')
-.attr('transform', `translate(${width / 2}, ${height / 2})`);
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
 const color = d3.scaleOrdinal(d3.schemeCategory10);
 
 // Shape helper to build arcs
 const arcGenerator = d3.arc()
-.innerRadius(0)
-.outerRadius(radius);
+    .innerRadius(0)
+    .outerRadius(radius);
 
 // Pie function to convert data into pie slices
 const pie = d3.pie()
-.value(d => d.value);
+    .value(d => d.value);
 
 // Function to update the pie chart with data
 function updatePieChart(data) {
-const arcs = pie(data);
+    const arcs = pie(data);
 
-// Build the pie chart: each part of the pie is a path that we build using the arc function
-const path = svg.selectAll("path")
-    .data(arcs);
+    // Build the pie chart: each part of the pie is a path that we build using the arc function
+    const path = svg.selectAll("path")
+        .data(arcs, d => d.data.label);
 
-path.enter()
-    .append("path")
-    .merge(path)
-    .attr("fill", d => color(d.data.label))
-    .attr("stroke", "white")
-    .style("stroke-width", "0px")
-    .style("opacity", 0.7)
-    .each(function(d) { this._current = d; }) // store the initial angles
-    .transition()
-    .duration(750)
-    .attrTween("d", function(d) {
-        const interpolate = d3.interpolate(this._current, d);
-        this._current = interpolate(0);
-        return t => arcGenerator(interpolate(t));
-    });
+    path.enter()
+        .append("path")
+        .attr("fill", d => color(d.data.label))
+        .attr("stroke", "white")
+        .style("stroke-width", "0px")
+        .style("opacity", 0.7)
+        .each(function(d) { this._current = d; }) // store the initial angles
+        .merge(path)
+        .transition()
+        .duration(750)
+        .attrTween("d", function(d) {
+            const interpolate = d3.interpolate(this._current, d);
+            this._current = interpolate(0);
+            return t => arcGenerator(interpolate(t));
+        });
 
-path.exit().remove();
+    path.exit().remove();
 
-// Add the annotation: use the centroid method to get the best coordinates
-const text = svg.selectAll("text")
-    .data(arcs);
+    // Add the annotation: use the centroid method to get the best coordinates
+    const text = svg.selectAll("text")
+        .data(arcs, d => d.data.label);
 
-text.enter()
-    .append("text")
-    .merge(text)
-    .transition()
-    .duration(750)
-    .attr("transform", d => `translate(${arcGenerator.centroid(d)})`)
-    .attr("dy", "0.35em")
-    .style("text-anchor", "middle")
-    .style("font-size", "17px")
-    .text(d => d.data.label);
+    text.enter()
+        .append("text")
+        .attr("dy", "0.35em")
+        .style("text-anchor", "middle")
+        .style("font-size", "17px")
+        .each(function(d) { this._current = d; }) // store the initial angles
+        .merge(text)
+        .transition()
+        .duration(750)
+        .attr("transform", d => `translate(${arcGenerator.centroid(d)})`)
+        .text(d => d.data.label);
 
-text.exit().remove();
+    text.exit().remove();
 }
 
+// Initial update with example data
 updatePieChart([
     { label: 'AAPL', value: 100 },
     { label: 'GOOGL', value: 200 },
     { label: 'AMZN', value: 300 },
 ]);
-
 
 document.getElementById('visualize').addEventListener('click', async () => {
     // if visualize is empty throw an error thru a toast or something "Add at least one stock to visualize"
@@ -120,21 +121,21 @@ document.getElementById('visualize').addEventListener('click', async () => {
 
     const positionValues = {};
     const pricePromises = stocks.map(({ stock, shares }) => {
-    return fetchStockPrice(stock).then(price => {
-        if (price) {
-            positionValues[stock] = price * shares;
-        }
+        return fetchStockPrice(stock).then(price => {
+            if (price) {
+                positionValues[stock] = price * shares;
+            }
+        });
     });
-});
 
-await Promise.all(pricePromises);
+    await Promise.all(pricePromises);
 
-console.log(positionValues);
+    console.log(positionValues);
 
-const data = Object.entries(positionValues).map(([label, value]) => ({ label, value }));
-console.log(data);
+    const data = Object.entries(positionValues).map(([label, value]) => ({ label, value }));
+    console.log(data);
 
-updatePieChart(data);
+    updatePieChart(data);
 });
 
 let riskTolerance = '';
