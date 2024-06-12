@@ -91,3 +91,12 @@ body {
     align-items: center;
     margin-top: 20px;
 }
+.api-error{
+    position: fixed;
+    bottom: 100px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it overlays on top of everything */
+}
+#api-error{
+    display: none;
+}

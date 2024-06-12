@@ -16,7 +16,7 @@ function addNewStockRow() {
 async function fetchStockPrice(ticker) {
     const API_KEY = '0S4wTnYC9S9EUQiPQhcutGEvcGNqq1LL';
     const url = `https://financialmodelingprep.com/api/v3/quote/${ticker}?apikey=${API_KEY}`;
-    const invalidFields = document.getElementById('invalid-fields');
+    const apiError = document.getElementById('api-error');
 
     try {
         const response = await fetch(url);
@@ -25,12 +25,12 @@ async function fetchStockPrice(ticker) {
             return data[0].price;
         } else {
             console.error('Error fetching stock price');
-            invalidFields.style.display = 'block';
+            apiError.style.display = 'block';
             return null;
         }
     } catch (error) {
         console.error('Error fetching stock price', error);
-        invalidFields.style.display = 'block';
+        apiError.style.display = 'block';
         return null;
     }
 }
@@ -97,7 +97,7 @@ function updatePieChart(data) {
         .transition()
         .duration(750)
         .attr("transform", d => `translate(${arcGenerator.centroid(d)})`)
-        .text(d => d.data.label);
+        .text(d => d.data.label.toUpperCase());
 
     text.exit().remove();
 }
