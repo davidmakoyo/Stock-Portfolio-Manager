@@ -8,6 +8,7 @@
 body {
     font-family: 'DM Sans', sans-serif;
     padding: 20px;
+    background-color: #f2f2f2f2;
 }
 .form-container {
     max-width: 600px;
@@ -74,4 +75,19 @@ body {
 .active-button {
     background-color: #4CAF50;
     color: white;
+}
+.invalid-fields{
+    position: fixed;
+    bottom: 20px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+    z-index: 9999; /* Ensure it overlays on top of everything */
+}
+#invalid-fields {
+    display: none;
+}
+#optimize-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 }

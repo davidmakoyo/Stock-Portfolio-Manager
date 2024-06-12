@@ -16,6 +16,7 @@ function addNewStockRow() {
 async function fetchStockPrice(ticker) {
     const API_KEY = '0S4wTnYC9S9EUQiPQhcutGEvcGNqq1LL';
     const url = `https://financialmodelingprep.com/api/v3/quote/${ticker}?apikey=${API_KEY}`;
+    const invalidFields = document.getElementById('invalid-fields');
 
     try {
         const response = await fetch(url);
@@ -24,11 +25,12 @@ async function fetchStockPrice(ticker) {
             return data[0].price;
         } else {
             console.error('Error fetching stock price');
+            invalidFields.style.display = 'block';
             return null;
-            // if error fetching stock price throw up an error bubble or something blank is not a valid ticker
         }
     } catch (error) {
         console.error('Error fetching stock price', error);
+        invalidFields.style.display = 'block';
         return null;
     }
 }
@@ -108,7 +110,7 @@ updatePieChart([
 ]);
 
 document.getElementById('visualize').addEventListener('click', async () => {
-    // if visualize is empty throw an error thru a toast or something "Add at least one stock to visualize"
+    const invalidFields = document.getElementById('invalid-fields');
     const stocks = [];
     for (let i = 1; i <= stockCount; i++) {
         const stock = document.getElementById(`stock${i}`).value;
@@ -118,6 +120,10 @@ document.getElementById('visualize').addEventListener('click', async () => {
         }
     }
     console.log(stocks);
+    if (stocks.length === 0) {
+        invalidFields.style.display = 'block';
+        return;
+    }
 
     const positionValues = {};
     const pricePromises = stocks.map(({ stock, shares }) => {
