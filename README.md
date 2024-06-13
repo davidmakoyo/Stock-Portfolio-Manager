@@ -19,6 +19,7 @@ The Stock Portfolio Optimizer is a web application designed to help users manage
 - **Tools**: Git, VSCode
 
 ## Demo
-Optimization feature is under construction, check back soon for a full demo
-[![Watch the video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
-*Link to video showing how the application works*
+Optimization feature is under construction, check back soon for a full demo, and visit https://davidmakoyo.github.io/Stock-Portfolio-Manager/ to try out the visualization feature yourself!
+
+https://github.com/davidmakoyo/Stock-Portfolio-Manager/assets/110312975/d6bf2316-9498-468b-a136-ef6498423044
+
