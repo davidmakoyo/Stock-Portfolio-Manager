@@ -16,7 +16,6 @@ The Stock Portfolio Optimizer is a web application designed to help users manage
 - **Languages**: HTML, CSS, JavaScript
 - **Libraries/Frameworks**: D3.js, Flask
 - **APIs**: Financial Modeling Prep, Yahoo Finance
-- **Tools**: Git, VSCode
 
 ## Demo
 Optimization feature is under construction, check back soon for a full demo, and visit https://davidmakoyo.github.io/Stock-Portfolio-Manager/ to try out the visualization feature yourself!
